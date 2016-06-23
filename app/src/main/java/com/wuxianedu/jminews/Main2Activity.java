@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -85,7 +88,7 @@ public class Main2Activity extends FragmentActivity{
         for (int i = 0; i<10; i++){
             Fragment fragment = new BaseFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("key",strings[i]);
+            bundle.putString("key",strings[i]+"  "+i);
             fragment.setArguments(bundle);
             fragmentList.add(fragment);
         }
@@ -113,16 +116,37 @@ public class Main2Activity extends FragmentActivity{
         }
     }
 
+
+
     class MyPagerChangedListen implements ViewPager.OnPageChangeListener{
+
+        private int start;
+        private int end;
+        private int currentFragmentIndex;
 
         /**
          * viewpager在滑动时调用
          * @param position
-         * @param positionOffset
+         * @param positionOffset  百分比 页面移动的百分比[0,1)
          * @param positionOffsetPixels
          */
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.i("---滑动时position---",position+"");
+            if(currentFragmentIndex == position){ //向右滑动
+                end = tab_width * currentFragmentIndex +
+                        (int) (tab_width * positionOffset);
+            }
+            if(currentFragmentIndex == position+1) { //向左滑动
+                end = tab_width * currentFragmentIndex -
+                        (int) (tab_width * (1 - positionOffset));
+            }
+            //定义动画
+            Animation mAnimation = new TranslateAnimation(start, end, 0, 0);
+            mAnimation.setFillAfter(true); //使动画停留在终止的地方
+            mAnimation.setDuration(0); //设置动画的时长
+            imageMove.startAnimation(mAnimation); //开始动画
+            start = end; //下次滑动的起始位置就是当前滑动的结束位置
 
         }
 
@@ -132,7 +156,10 @@ public class Main2Activity extends FragmentActivity{
          */
         @Override
         public void onPageSelected(int position) {
-
+//            Animation animation = new TranslateAnimation(,,0,0);
+            Log.i("---被选择后position----",position+"");
+            currentFragmentIndex = position;
+            hsvMain.smoothScrollTo((currentFragmentIndex - 1) * tab_width, 0);
         }
 
         /**
