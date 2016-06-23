@@ -3,13 +3,11 @@ package com.wuxianedu.jminews;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,31 +15,37 @@ import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wuxianedu.jminews.fragment.BaseFragment;
-
-import org.w3c.dom.Text;
+import com.wuxianedu.jminews.fragment.CaiJingFragment;
+import com.wuxianedu.jminews.fragment.GuoJiFragment;
+import com.wuxianedu.jminews.fragment.GuoNeiFragment;
+import com.wuxianedu.jminews.fragment.KeJiFragment;
+import com.wuxianedu.jminews.fragment.SheHuiFragment;
+import com.wuxianedu.jminews.fragment.ShiShangFragment;
+import com.wuxianedu.jminews.fragment.TiYuFragment;
+import com.wuxianedu.jminews.fragment.TopFragment;
+import com.wuxianedu.jminews.fragment.YuLeFragment;
+import com.wuxianedu.jminews.fragment.junShiFragment;
 
 import java.util.ArrayList;
 
 /**
  * Created by Hu131 on 2016/6/23.
  */
-public class Main2Activity extends FragmentActivity{
+public class HomeActivity extends AppCompatActivity {
 
     private ViewPager pager;
     private LinearLayout linearAdd;
     private ImageView imageMove;
     private HorizontalScrollView hsvMain;
-    String[] strings = {"头条","社会","国内","国际","娱乐", "体育","军事","科技","财经","时尚"};
+    String[] strings = {"头条", "社会", "国内", "国际", "娱乐", "体育", "军事", "科技", "财经", "时尚"};
     private int tab_width; //每次滑动的屏幕宽度
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_home);
 
         pager = (ViewPager) findViewById(R.id.view_pager_main);
         linearAdd = (LinearLayout) findViewById(R.id.linear_layout_add);
@@ -58,8 +62,8 @@ public class Main2Activity extends FragmentActivity{
     private void initTab() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm); // 把当前屏幕的宽高像素写入dm对象中
-        tab_width = (int)(dm.widthPixels / 4 + 0.5f);
-        for (int i = 0; i<10; i++) {
+        tab_width = (int) (dm.widthPixels / 4 + 0.5f);
+        for (int i = 0; i < strings.length; i++) {
             final TextView child = new TextView(this);
             child.setText(strings[i]);
             child.setGravity(Gravity.CENTER);
@@ -72,7 +76,7 @@ public class Main2Activity extends FragmentActivity{
             child.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pager.setCurrentItem((Integer)child.getTag());
+                    pager.setCurrentItem((Integer) child.getTag());
                 }
             });
         }
@@ -85,21 +89,25 @@ public class Main2Activity extends FragmentActivity{
 
         //top(头条，默认),shehui(社会),guonei(国内),guoji(国际),yule(娱乐),tiyu(体育)junshi(军事),keji(科技),caijing(财经),shishang(时尚)
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        for (int i = 0; i<10; i++){
-            Fragment fragment = new BaseFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("key",strings[i]+"  "+i);
-            fragment.setArguments(bundle);
-            fragmentList.add(fragment);
-        }
-        pager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),fragmentList));
+        fragmentList.add(new TopFragment());
+        fragmentList.add(new SheHuiFragment());
+        fragmentList.add(new GuoNeiFragment());
+        fragmentList.add(new GuoJiFragment());
+        fragmentList.add(new YuLeFragment());
+        fragmentList.add(new TiYuFragment());
+        fragmentList.add(new junShiFragment());
+        fragmentList.add(new KeJiFragment());
+        fragmentList.add(new CaiJingFragment());
+        fragmentList.add(new ShiShangFragment());
+        pager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
         pager.addOnPageChangeListener(new MyPagerChangedListen());
 
     }
 
 
-    class MyFragmentPagerAdapter extends FragmentPagerAdapter{
+    class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         ArrayList<Fragment> list;
+
         public MyFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> list) {
             super(fm);
             this.list = list;
@@ -117,8 +125,7 @@ public class Main2Activity extends FragmentActivity{
     }
 
 
-
-    class MyPagerChangedListen implements ViewPager.OnPageChangeListener{
+    class MyPagerChangedListen implements ViewPager.OnPageChangeListener {
 
         private int start;
         private int end;
@@ -126,18 +133,19 @@ public class Main2Activity extends FragmentActivity{
 
         /**
          * viewpager在滑动时调用
+         *
          * @param position
-         * @param positionOffset  百分比 页面移动的百分比[0,1)
+         * @param positionOffset       百分比 页面移动的百分比[0,1)
          * @param positionOffsetPixels
          */
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.i("---滑动时position---",position+"");
-            if(currentFragmentIndex == position){ //向右滑动
+            //  Log.i("---滑动时position---",position+"");
+            if (currentFragmentIndex == position) { //向右滑动
                 end = tab_width * currentFragmentIndex +
                         (int) (tab_width * positionOffset);
             }
-            if(currentFragmentIndex == position+1) { //向左滑动
+            if (currentFragmentIndex == position + 1) { //向左滑动
                 end = tab_width * currentFragmentIndex -
                         (int) (tab_width * (1 - positionOffset));
             }
@@ -152,18 +160,20 @@ public class Main2Activity extends FragmentActivity{
 
         /**
          * viewpager被选择后调用
+         *
          * @param position
          */
         @Override
         public void onPageSelected(int position) {
 //            Animation animation = new TranslateAnimation(,,0,0);
-            Log.i("---被选择后position----",position+"");
+            //   Log.i("---被选择后position----",position+"");
             currentFragmentIndex = position;
             hsvMain.smoothScrollTo((currentFragmentIndex - 1) * tab_width, 0);
         }
 
         /**
          * viewpager状态改变时被调用
+         *
          * @param state
          */
         @Override
