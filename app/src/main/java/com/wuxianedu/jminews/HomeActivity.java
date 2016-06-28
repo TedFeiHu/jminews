@@ -29,6 +29,8 @@ import com.wuxianedu.jminews.fragment.YuLeFragment;
 import com.wuxianedu.jminews.fragment.junShiFragment;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * Created by Hu131 on 2016/6/23.
@@ -41,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private HorizontalScrollView hsvMain;
     String[] strings = {"头条", "社会", "国内", "国际", "娱乐", "体育", "军事", "科技", "财经", "时尚"};
     private int tab_width; //每次滑动的屏幕宽度
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

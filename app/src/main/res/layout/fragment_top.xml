@@ -3,10 +3,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+   <!-- <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="新闻头条"
-        android:gravity="center"
-        android:textSize="50sp"/>
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/jmi"/>-->
+    <ListView
+        android:id="@+id/list_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
