@@ -3,4 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="zhuce">注册用户名</string>
+    <string name="username">用户名：</string>
+    <string name="password">密码：</string>
+    <string name="login">登陆</string>
 </resources>

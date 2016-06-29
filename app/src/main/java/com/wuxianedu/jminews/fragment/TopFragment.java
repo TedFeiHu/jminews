@@ -1,5 +1,6 @@
 package com.wuxianedu.jminews.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.wuxianedu.jminews.DetailActivity;
 import com.wuxianedu.jminews.MyApplication;
 import com.wuxianedu.jminews.R;
 import com.wuxianedu.jminews.bean.DataBean;
@@ -31,7 +34,7 @@ import java.util.ArrayList;
 /**
  * Created by Hu131 on 2016/6/23.
  */
-public class TopFragment extends Fragment {
+public class TopFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     Handler handler = new Handler() {
         @Override
@@ -54,6 +57,7 @@ public class TopFragment extends Fragment {
         this.inflater = inflater;
         View view = inflater.inflate(R.layout.fragment_top, null);
         topListView = (ListView) view.findViewById(R.id.list_view_top);
+        topListView.setOnItemClickListener(this);
 
         //开启网络请求线程
         ThreadHttp threadHttp = new ThreadHttp();
@@ -61,6 +65,13 @@ public class TopFragment extends Fragment {
         thread.start();
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("uri",dataList.get(position).getUrl());
+        startActivity(intent);
     }
 
 
